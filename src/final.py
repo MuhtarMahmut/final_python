@@ -225,9 +225,9 @@ class Interpreter:
         result = []
         while True:
             result = pgoal
-            res = result
+            temp = result
 
-            while res:
+            while len(temp) >= 0:
                 selection = random.randint(0, len(result))
                 rand_rule = random.randint(0, len(program))
                 rand_rule = self.freshen(rand_rule)
@@ -237,22 +237,22 @@ class Interpreter:
                 except:
                     break
 
-                res.remove(selection)
+                temp.remove(selection)
 
                 for term in rand_rule.body.terms:
-                    res.append(term)
+                    temp.append(term)
 
                 dictionary1 = {}
-                for term in res:
+                for term in temp:
                     dictionary1[term] = self.substitute_in_term(sig, term)
-                res = dictionary1
+                temp = dictionary1
 
                 dictionary2 = {}
                 for term in result:
                     dictionary2[term] = self.substitute_in_term(sig, term)
                 result = dictionary2
 
-                if res: # skip that iteration
+                if temp: # skip that iteration
                     continue
                 else:
                     break # exit the loop
