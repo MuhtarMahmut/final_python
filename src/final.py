@@ -165,33 +165,33 @@ class Interpreter:
     '''
 
     def unify(self, t1: Term, t2: Term) -> dict:
-        def unification(t1: Term, t2: Term, sig: dict):
-            x = self.substitute_in_term(sig, t1)
-            y = self.substitute_in_term(sig, t2)
-            if isinstance(x, Variable) and (not self.occurs_check(x, y)):
-                for k in sig.keys():
-                    sig[k] = self.substitute_in_term({x: y}, sig[k])
-                sig[x] = y
-                return sig
-            elif isinstance(y, Variable) and not self.occurs_check(y, x):
-                for k in sig.keys():
-                    sig[k] = self.substitute_in_term({y: x}, sig[k])
-                sig[y] = x
-                return sig
-            elif x == y:
-                return sig
-            elif isinstance(x, Function) and isinstance(y, Function):
-                if len(x.terms) != len(y.terms):
+        def unification(t1: Term, t2: Term, dictionary1: dict):
+            st1 = self.substitute_in_term(dictionary1, t1)
+            st2 = self.substitute_in_term(dictionary1, t2)
+            if isinstance(st1, Variable) and (not self.occurs_check(st1, st2)):
+                for k in dictionary1.keys():
+                    dictionary1[k] = self.substitute_in_term({st1: st2}, dictionary1[k])
+                dictionary1[st1] = st2
+                return dictionary1
+            elif isinstance(st2, Variable) and not self.occurs_check(st2, st1):
+                for k in dictionary1.keys():
+                    dictionary1[k] = self.substitute_in_term({st2: st1}, dictionary1[k])
+                dictionary1[st2] = st1
+                return dictionary1
+            elif st1 == st2:
+                return dictionary1
+            elif isinstance(st1, Function) and isinstance(st2, Function):
+                if len(st1.terms) != len(st2.terms):
                     raise Not_unifiable()
                 else:
-                    for tx, ty in zip(x.terms, y.terms):
-                        res = unification(tx, ty, sig)
+                    for tx, ty in zip(st1.terms, st2.terms):
+                        res = unification(tx, ty, dictionary1)
                     return res
 
             else:
                 raise Not_unifiable()
-            fin = unification(t1, t2, {})
-            return fin
+
+        return unification(t1, t2, {})
 
 
     fresh_counter = 0
