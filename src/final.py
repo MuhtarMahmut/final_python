@@ -169,13 +169,13 @@ class Interpreter:
             st1 = self.substitute_in_term(dictionary1, t1)
             st2 = self.substitute_in_term(dictionary1, t2)
             if isinstance(st1, Variable) and (not self.occurs_check(st1, st2)):
-                for k in dictionary1.keys():
-                    dictionary1[k] = self.substitute_in_term({st1: st2}, dictionary1[k])
+                for each in dictionary1.keys():
+                    dictionary1[each] = self.substitute_in_term({st1: st2}, dictionary1[each])
                 dictionary1[st1] = st2
                 return dictionary1
             elif isinstance(st2, Variable) and not self.occurs_check(st2, st1):
-                for k in dictionary1.keys():
-                    dictionary1[k] = self.substitute_in_term({st2: st1}, dictionary1[k])
+                for each in dictionary1.keys():
+                    dictionary1[each] = self.substitute_in_term({st2: st1}, dictionary1[each])
                 dictionary1[st2] = st1
                 return dictionary1
             elif st1 == st2:
